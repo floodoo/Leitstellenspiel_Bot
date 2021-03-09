@@ -7,20 +7,23 @@ url = "https://www.leitstellenspiel.de/users/sign_in"
 user = ""
 pw = ""
 
-
 browser = webdriver.Safari()
-browser.get(url)
 
-username = browser.find_element_by_id("user_email")
-password = browser.find_element_by_id("user_password")
 
-username.send_keys(user)
-password.send_keys(pw)
+def start():
 
-browser.find_element_by_name("commit").click()
+    browser.get(url)
 
-sleep(2)
-browser.find_element_by_class_name("cookies-eu-ok").click()
+    username = browser.find_element_by_id("user_email")
+    password = browser.find_element_by_id("user_password")
 
-sleep(2)
-browser.quit()
+    username.send_keys(user)
+    password.send_keys(pw)
+
+    browser.find_element_by_name("commit").click()
+
+    sleep(2)
+    browser.find_element_by_class_name("cookies-eu-ok").click()
+
+def stop():
+    browser.quit()
