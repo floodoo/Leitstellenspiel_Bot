@@ -6,6 +6,7 @@ from time import sleep
 url = "https://www.leitstellenspiel.de/users/sign_in"
 user = ""
 pw = ""
+active_emergencies = []
 
 driver = webdriver.Safari()
 driver.maximize_window()
@@ -26,6 +27,8 @@ driver.find_element_by_class_name("cookies-eu-ok").click()
 emergencies = driver.find_elements_by_class_name("missionSideBarEntry")
 
 for i in emergencies:
-    print("Emergencies: " + i.text)
-
+    print("Active emergency: " + i.text)
+    active_emergencies.append(i.get_attribute("id"))
+    
+    
 driver.quit()
