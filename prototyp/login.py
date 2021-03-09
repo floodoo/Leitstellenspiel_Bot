@@ -19,7 +19,7 @@ password.send_keys(pw)
 
 browser.find_element_by_name("commit").click()
 
-sleep(3)
+sleep(2)
 browser.find_element_by_class_name("cookies-eu-ok").click()
 
 sleep(2)
