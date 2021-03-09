@@ -27,8 +27,20 @@ driver.find_element_by_class_name("cookies-eu-ok").click()
 emergencies = driver.find_elements_by_class_name("missionSideBarEntry")
 
 for i in emergencies:
-    print("Active emergency: " + i.text)
+    # print("Active emergency: " + i.text)
     active_emergencies.append(i.get_attribute("id"))
+
+counter = 0
+for i in active_emergencies:
     
-    
-driver.quit()
+    if counter <= len(active_emergencies):
+        try:
+            url = "https://www.leitstellenspiel.de/missions/"+active_emergencies[counter][8:]
+            driver.get(url)
+            counter += 1
+        except:
+            print("ID no longer exists")
+            
+        sleep(2)
+
+# driver.quit()
