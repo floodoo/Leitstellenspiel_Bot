@@ -20,27 +20,3 @@ class Active_Emergencies():
             active_emergencies.append(i.get_attribute("mission_id"))
 
         return active_emergencies
-
-
-url = "https://www.leitstellenspiel.de/users/sign_in"
-user = ""
-pw = ""
-
-driver = webdriver.Safari()
-driver.maximize_window()
-
-driver.get(url)
-
-username = driver.find_element_by_id("user_email")
-password = driver.find_element_by_id("user_password")
-
-username.send_keys(user)
-password.send_keys(pw)
-
-driver.find_element_by_name("commit").click()
-
-sleep(2)
-driver.find_element_by_class_name("cookies-eu-ok").click()
-
-test = Active_Emergencies(driver)
-print(test.get_all_active_Emergencies_id())

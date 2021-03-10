@@ -6,35 +6,9 @@ import json
 
 
 class Vehicles():
-
+    
     def __init__(self, driver):
         self.driver = driver
-
-    # def get_all_vehicle_id(self):
-    #     url = "https://www.leitstellenspiel.de/vehicles/"
-    #     all_vehicle_id = []
-
-    #     self.driver.get(url)
-    #     vehicles = self.driver.find_elements_by_xpath(
-    #         "//a[contains(@href,'vehicles')]")
-        
-    #     for i in vehicles:
-    #         all_vehicle_id.append(i.get_attribute("href")[41:])
-        
-    #     return all_vehicle_id
-
-    # def get_all_vehicle_types(self):
-    #     url = "https://www.leitstellenspiel.de/vehicles/"
-    #     all_vehicle_types = []
-
-    #     self.driver.get(url)
-    #     vehicles = self.driver.find_elements_by_class_name(
-    #         "vehicle_image_reload")
-        
-    #     for i in vehicles:
-    #         all_vehicle_types.append(i.get_attribute("vehicle_type_id"))
-            
-    #     return all_vehicle_types
    
     # The simple version did not work
     def get_vehicle_api(self):
@@ -66,28 +40,98 @@ class Vehicles():
             outfile.write(json.dumps(obj, indent=4, sort_keys=True))
             outfile.close()
         
-        driver.close()
+    def get_all_vehicle_id(self):
+        all_vehicle_id = []
+
+        with open("data.json", "r") as json_file:
+            data = json.load(json_file)
+            for i in data:
+                all_vehicle_id.append(i["id"])
+                
+            json_file.close()
+            
+            return all_vehicle_id
         
+    def get_all_vehicle_types(self):
+        all_vehicle_types = []
+
+        with open("data.json", "r") as json_file:
+            data = json.load(json_file)
+            for i in data:
+                all_vehicle_types.append(i["vehicle_type"])
+
+            json_file.close()
+
+            return all_vehicle_types
         
-url = "https://www.leitstellenspiel.de/users/sign_in"
-user = ""
-pw = ""
+    def get_all_vehicle_fms_real(self):
+        all_vehicle_fms_real = []
 
-driver = webdriver.Safari()
-driver.maximize_window()
+        with open("data.json", "r") as json_file:
+            data = json.load(json_file)
+            for i in data:
+                all_vehicle_fms_real.append(i["fms_real"])
 
-driver.get(url)
+            json_file.close()
 
-username = driver.find_element_by_id("user_email")
-password = driver.find_element_by_id("user_password")
+            return all_vehicle_fms_real
+        
+    def get_all_vehicle_fms_show(self):
+        all_vehicle_fms_show = []
 
-username.send_keys(user)
-password.send_keys(pw)
+        with open("data.json", "r") as json_file:
+            data = json.load(json_file)
+            for i in data:
+                all_vehicle_fms_show.append(i["fms_show"])
 
-driver.find_element_by_name("commit").click()
+            json_file.close()
 
-sleep(2)
-driver.find_element_by_class_name("cookies-eu-ok").click()
+            return all_vehicle_fms_show
+        
+    def get_all_vehicle_target_type(self):
+        all_vehicle_target_type = []
 
-test = Vehicles(driver)
-test.get_vehicle_api()
+        with open("data.json", "r") as json_file:
+            data = json.load(json_file)
+            for i in data:
+                all_vehicle_target_type.append(i["target_type"])
+
+            json_file.close()
+
+            return all_vehicle_target_type
+        
+    def get_all_vehicle_target_id(self):
+        all_vehicle_target_id = []
+
+        with open("data.json", "r") as json_file:
+            data = json.load(json_file)
+            for i in data:
+                all_vehicle_target_id.append(i["target_id"])
+
+            json_file.close()
+
+            return all_vehicle_target_id
+        
+    def get_all_vehicle_building_id(self):
+        all_vehicle_building_id = []
+
+        with open("data.json", "r") as json_file:
+            data = json.load(json_file)
+            for i in data:
+                all_vehicle_building_id.append(i["building_id"])
+
+            json_file.close()
+
+            return all_vehicle_building_id
+        
+    def get_all_vehicle_caption(self):
+        all_vehicle_caption = []
+
+        with open("data.json", "r") as json_file:
+            data = json.load(json_file)
+            for i in data:
+                all_vehicle_caption.append(i["caption"])
+
+            json_file.close()
+
+            return all_vehicle_caption
