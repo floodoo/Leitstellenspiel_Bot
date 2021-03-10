@@ -4,8 +4,8 @@ from selenium import webdriver
 from time import sleep
 
 
-class Active_Emergencies():
-    
+class Emergencies():
+
     def __init__(self, driver):
         self.driver = driver
 
@@ -13,10 +13,43 @@ class Active_Emergencies():
         url = "https://www.leitstellenspiel.de/"
         active_emergencies = []
 
-        driver.get(url)
-        emergencies = self.driver.find_elements_by_class_name("missionSideBarEntry")
+        self.driver.get(url)
+        emergencies = self.driver.find_elements_by_class_name(
+            "missionSideBarEntry")
 
         for i in emergencies:
             active_emergencies.append(i.get_attribute("mission_id"))
 
         return active_emergencies
+
+    def get_required_vehicles(self):
+        url = "https://www.leitstellenspiel.de/missions/1830178927"
+
+        self.driver.get(url)
+        sleep(2)
+        self.driver.find_element_by_id("navbar-right-help-button").click()
+        
+
+
+url = "https://www.leitstellenspiel.de/users/sign_in"
+user = ""
+pw = ""
+
+driver = webdriver.Safari()
+driver.maximize_window()
+
+driver.get(url)
+
+username = driver.find_element_by_id("user_email")
+password = driver.find_element_by_id("user_password")
+
+username.send_keys(user)
+password.send_keys(pw)
+
+driver.find_element_by_name("commit").click()
+
+sleep(2)
+driver.find_element_by_class_name("cookies-eu-ok").click()
+
+test = Emergencies(driver)
+test.get_required_vehicles()
