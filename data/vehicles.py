@@ -3,7 +3,6 @@ from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
 from time import sleep
 import json
-import simplejson
 
 
 class Vehicles():
