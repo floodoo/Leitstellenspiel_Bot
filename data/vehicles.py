@@ -37,7 +37,8 @@ class Vehicles():
             
     #     return all_vehicle_types
    
-    def get_json(self):
+    # The simple version did not work
+    def get_vehicle_api(self):
         url = "https://www.leitstellenspiel.de/api/vehicles"
        
         self.driver.get(url)
@@ -48,6 +49,7 @@ class Vehicles():
             json.dump(json_data, json_file)
             json_file.close()
             
+        # Remove Backslash and "
         with open("data.json", "r") as json_file:
             filedata = json_file.read()
             filedata = filedata.replace("\\", "")
@@ -57,7 +59,8 @@ class Vehicles():
         with open("data.json", "w") as json_file:
             json_file.write(filedata)
             json_file.close()
-            
+        
+        # Beautify Json File
         with open('data.json') as json_file:
             obj = json.load(json_file)
             outfile = open('data.json', "w")
@@ -88,4 +91,4 @@ sleep(2)
 driver.find_element_by_class_name("cookies-eu-ok").click()
 
 test = Vehicles(driver)
-test.get_json()
+test.get_vehicle_api()
