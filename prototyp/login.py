@@ -24,6 +24,3 @@ driver.find_element_by_name("commit").click()
 
 sleep(2)
 driver.find_element_by_class_name("cookies-eu-ok").click()
-
-test = Active_Emergencies(driver)
-print(test.get_all_active_Emergencies_id())
