@@ -16,13 +16,28 @@ class Vehicles():
         driver.get(url)
         vehicles = self.driver.find_elements_by_xpath(
             "//a[contains(@href,'vehicles')]")
-
+        
         for i in vehicles:
             all_vehicles.append(i.get_attribute("href")[41:])
-
+        
         return all_vehicles
 
+    def get_all_vehicle_types(self):
+        url = "https://www.leitstellenspiel.de/vehicles/"
+        all_vehicle_types = []
 
+        driver.get(url)
+        vehicles = self.driver.find_elements_by_class_name(
+            "vehicle_image_reload")
+        
+        for i in vehicles:
+            all_vehicle_types.append(i.get_attribute("vehicle_type_id"))
+            
+        return all_vehicle_types
+   
+   
+   
+        
 url = "https://www.leitstellenspiel.de/users/sign_in"
 user = ""
 pw = ""
@@ -45,3 +60,4 @@ driver.find_element_by_class_name("cookies-eu-ok").click()
 
 test = Vehicles(driver)
 print(test.get_all_vehicle_id())
+print(test.get_all_vehicle_types())
