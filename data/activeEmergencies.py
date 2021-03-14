@@ -2,6 +2,7 @@ import selenium
 from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
 from time import sleep
+import os
 
 
 class Emergencies():
@@ -23,12 +24,31 @@ class Emergencies():
         return active_emergencies
 
     def get_required_vehicles(self):
-        url = "https://www.leitstellenspiel.de/missions/1830178927"
+        url = "https://www.leitstellenspiel.de/missions/1838186552"
 
         self.driver.get(url)
         sleep(2)
         self.driver.find_element_by_id("navbar-right-help-button").click()
+        sleep(1)
+        test = self.driver.find_elements_by_class_name("table-striped")[1]
+        vehicles_needet = test.text
         
+        vehicles_needet = os.linesep.join(
+            [s for s in vehicles_needet.splitlines() if s.strip()])
+        
+        with open("test.txt", "w") as text_file:
+            text_file.write(vehicles_needet)
+            text_file.close()
+            
+        with open("test.txt", "r+") as f:
+            new_f = f.readlines()
+            f.seek(0)
+            for line in new_f:
+                if "Beschreibung" not in line and "Wert" not in line:
+                    f.write(line)
+            f.truncate()
+            
+        driver.quit()
 
 
 url = "https://www.leitstellenspiel.de/users/sign_in"
@@ -36,7 +56,7 @@ user = ""
 pw = ""
 
 driver = webdriver.Safari()
-driver.maximize_window()
+# driver.maximize_window()
 
 driver.get(url)
 
@@ -48,7 +68,7 @@ password.send_keys(pw)
 
 driver.find_element_by_name("commit").click()
 
-sleep(2)
+sleep(3)
 driver.find_element_by_class_name("cookies-eu-ok").click()
 
 test = Emergencies(driver)
