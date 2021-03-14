@@ -4,6 +4,7 @@ from selenium import webdriver
 from time import sleep
 import os
 import json
+from random import uniform
 
 
 class Emergencies():
@@ -50,25 +51,38 @@ class Emergencies():
             f.truncate()
         counter = 0
         second_counter = 0
-        
+
         num_lines = sum(1 for line in open('required_vehicles.txt'))
         num_lines -= 1
-        
+
         with open('required_vehicles.txt', 'r') as f, open('required_vehicles.json', 'w') as fo:
             fo.write("{")
-                
+
             for line in f:
                 durchZwei = counter % 2
-                
+
                 if counter == num_lines:
                     fo.write(line.strip() + '"\n')
-                
+
                 elif durchZwei != 0:
                     fo.write(line.strip() + '",\n')
-                    
+
                 else:
                     fo.write('"' + line.strip() + '":"')
-                    
+
                 counter += 1
-                    
+
             fo.write("}")
+
+    def send_required_vehicles(self, mission_id, vehicle_id_list):
+        url = "https://www.leitstellenspiel.de/missions/" + mission_id
+
+        self.driver.get(url)
+        sleep(2)
+
+        for vehicle_id in vehicle_id_list:
+            driver.find_element_by_id("vehicle_checkbox_" + vehicle_id).click()
+            sleep(uniform(0.3, 2))
+            
+        sleep(uniform(1.5, 3))
+        driver.find_element_by_id("mission_alarm_btn").click()

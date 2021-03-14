@@ -9,7 +9,7 @@ class Vehicles():
     
     def __init__(self, driver):
         self.driver = driver
-        self.filename = "data.json"
+        self.filename = "vehicle_data.json"
    
     # The simple version did not work
     def get_vehicle_api(self):
