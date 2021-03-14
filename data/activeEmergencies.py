@@ -49,6 +49,10 @@ class Emergencies():
                     f.write(line)
             f.truncate()
         counter = 0
+        second_counter = 0
+        
+        num_lines = sum(1 for line in open('test.txt'))
+        num_lines -= 1
         
         with open('test.txt', 'r') as f, open('required_vehicles.json', 'w') as fo:
             fo.write("{")
@@ -56,11 +60,17 @@ class Emergencies():
             for line in f:
                 durchZwei = counter % 2
                 
-                if durchZwei != 0:
+                if counter == num_lines:
+                    fo.write(line.strip() + '"\n')
+                    print("counter == num_lines")
+                
+                elif durchZwei != 0:
                     fo.write(line.strip() + '",\n')
+                    print("normal")
                     
                 else:
                     fo.write('"' + line.strip() + '":"')
+                    print(": gesetzt")
                     
                 counter += 1
                     
