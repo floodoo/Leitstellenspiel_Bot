@@ -3,6 +3,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
 from time import sleep
 import os
+import json
 
 
 class Emergencies():
@@ -32,14 +33,14 @@ class Emergencies():
         sleep(1)
         test = self.driver.find_elements_by_class_name("table-striped")[1]
         vehicles_needet = test.text
-        
+
         vehicles_needet = os.linesep.join(
             [s for s in vehicles_needet.splitlines() if s.strip()])
-        
+
         with open("test.txt", "w") as text_file:
             text_file.write(vehicles_needet)
             text_file.close()
-            
+
         with open("test.txt", "r+") as f:
             new_f = f.readlines()
             f.seek(0)
@@ -47,7 +48,24 @@ class Emergencies():
                 if "Beschreibung" not in line and "Wert" not in line:
                     f.write(line)
             f.truncate()
-            
+        counter = 0
+        
+        with open('test.txt', 'r') as f, open('required_vehicles.json', 'w') as fo:
+            fo.write("{")
+                
+            for line in f:
+                durchZwei = counter % 2
+                
+                if durchZwei != 0:
+                    fo.write(line.strip() + '",\n')
+                    
+                else:
+                    fo.write('"' + line.strip() + '":"')
+                    
+                counter += 1
+                    
+            fo.write("}")
+                    
         driver.quit()
 
 
