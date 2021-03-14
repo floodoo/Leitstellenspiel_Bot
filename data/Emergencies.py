@@ -29,9 +29,9 @@ class Emergencies():
         url = "https://www.leitstellenspiel.de/missions/" + mission_id
 
         self.driver.get(url)
-        sleep(2)
+        sleep(uniform(1.5, 3))
         self.driver.find_element_by_id("navbar-right-help-button").click()
-        sleep(1)
+        sleep(uniform(1, 2))
         test = self.driver.find_elements_by_class_name("table-striped")[1]
         vehicles_needet = test.text
 
