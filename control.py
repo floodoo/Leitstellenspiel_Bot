@@ -7,13 +7,14 @@ import selenium
 from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
 
+
 class Control():
 
     def __init__(self):
         url = "https://www.leitstellenspiel.de/users/sign_in"
 
-        user = "Flo0705"
-        pw = "Xx66q3we"
+        user = ""
+        pw = ""
 
         self.driver = webdriver.Safari()
         self.driver.get(url)
@@ -26,15 +27,16 @@ class Control():
 
         self.driver.find_element_by_name("commit").click()
 
-        sleep(uniform(1.5, 2.5))
+        sleep(uniform(2, 3))
         self.driver.find_element_by_class_name("cookies-eu-ok").click()
-        
+
         thread = threading.Thread(target=self.update_vehicle_data)
         thread.start()
 
     def update_vehicle_data(self):
-        vehicle = Vehicles(self.driver)
-        vehicle.get_vehicle_api()
-        sleep(uniform(10, 20))
+        while True:
+            vehicle = Vehicles(self.driver)
+            vehicle.get_vehicle_api()
+            sleep(uniform(10, 20))
 
 Control()
