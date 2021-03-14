@@ -62,15 +62,12 @@ class Emergencies():
                 
                 if counter == num_lines:
                     fo.write(line.strip() + '"\n')
-                    print("counter == num_lines")
                 
                 elif durchZwei != 0:
                     fo.write(line.strip() + '",\n')
-                    print("normal")
                     
                 else:
                     fo.write('"' + line.strip() + '":"')
-                    print(": gesetzt")
                     
                 counter += 1
                     
