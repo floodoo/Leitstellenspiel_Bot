@@ -24,8 +24,8 @@ class Emergencies():
 
         return active_emergencies
 
-    def get_required_vehicles(self):
-        url = "https://www.leitstellenspiel.de/missions/1838186552"
+    def get_required_vehicles(self, mission_id):
+        url = "https://www.leitstellenspiel.de/missions/" + mission_id
 
         self.driver.get(url)
         sleep(2)
@@ -37,11 +37,11 @@ class Emergencies():
         vehicles_needet = os.linesep.join(
             [s for s in vehicles_needet.splitlines() if s.strip()])
 
-        with open("test.txt", "w") as text_file:
+        with open("required_vehicles.txt", "w") as text_file:
             text_file.write(vehicles_needet)
             text_file.close()
 
-        with open("test.txt", "r+") as f:
+        with open("required_vehicles.txt", "r+") as f:
             new_f = f.readlines()
             f.seek(0)
             for line in new_f:
@@ -51,10 +51,10 @@ class Emergencies():
         counter = 0
         second_counter = 0
         
-        num_lines = sum(1 for line in open('test.txt'))
+        num_lines = sum(1 for line in open('required_vehicles.txt'))
         num_lines -= 1
         
-        with open('test.txt', 'r') as f, open('required_vehicles.json', 'w') as fo:
+        with open('required_vehicles.txt', 'r') as f, open('required_vehicles.json', 'w') as fo:
             fo.write("{")
                 
             for line in f:
@@ -72,29 +72,3 @@ class Emergencies():
                 counter += 1
                     
             fo.write("}")
-                    
-        driver.quit()
-
-
-url = "https://www.leitstellenspiel.de/users/sign_in"
-user = ""
-pw = ""
-
-driver = webdriver.Safari()
-# driver.maximize_window()
-
-driver.get(url)
-
-username = driver.find_element_by_id("user_email")
-password = driver.find_element_by_id("user_password")
-
-username.send_keys(user)
-password.send_keys(pw)
-
-driver.find_element_by_name("commit").click()
-
-sleep(3)
-driver.find_element_by_class_name("cookies-eu-ok").click()
-
-test = Emergencies(driver)
-test.get_required_vehicles()
