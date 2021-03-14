@@ -55,7 +55,7 @@ class Emergencies():
         num_lines = sum(1 for line in open('required_vehicles.txt'))
         num_lines -= 1
 
-        with open('required_vehicles.txt', 'r') as f, open('required_vehicles.json', 'w') as fo:
+        with open('required_vehicles.txt', 'r') as f, open('required_vehicles' + mission_id + '.json', 'w') as fo:
             fo.write("{")
 
             for line in f:
