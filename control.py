@@ -7,6 +7,7 @@ import selenium
 from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
 import logging
+import json
 
 
 class Control():
@@ -41,41 +42,38 @@ class Control():
         self.vehicle = Vehicles(self.driver)
         self.use_driver = False
 
-        logging.info("THREAD: update_vehicle_data start")
-        threading.Thread(target=self.update_vehicle_data).start()
-        logging.info("THREAD: update_active_emergency_list start")
-        threading.Thread(target=self.update_active_emergency_list).start()
-        logging.info("Method: go_through_emergencies start")
-        self.go_through_emergencies()
+        # logging.info("THREAD: update_vehicle_data start")
+        # threading.Thread(target=self.update_vehicle_data).start()
+        # logging.info("THREAD: update_active_emergency_list start")
+        # threading.Thread(target=self.update_active_emergency_list).start()
+        # logging.info("Method: go_through_emergencies start")
+        self.update_active_emergency_list()
+        # self.go_through_emergencies()
+        # self.send_required_vehicles()
 
     def update_vehicle_data(self):
-        while True:
-            if self.use_driver != True:
-                self.use_driver = True
-                logging.info("Get Vehicle Api")
-                self.vehicle.get_vehicle_api()
-                self.use_driver = False
-
-                sleep(uniform(10, 20))
+        if self.use_driver != True:
+            self.use_driver = True
+            logging.info("Get Vehicle Api")
+            self.vehicle.get_vehicle_api()
+            self.use_driver = False
 
     def update_active_emergency_list(self):
-        while True:
-            if self.use_driver != True:
-                self.use_driver = True
-                self.load = True
-                logging.info("Get all active Emergency id's")
-                self.emergency_list = self.emergencies.get_all_active_Emergencies_id()
-                self.use_driver = False
-                self.load = False
-
-                sleep(uniform(60, 120))
+        if self.use_driver != True:
+            self.use_driver = True
+            self.load = True
+            logging.info("Get all active Emergency id's")
+            self.emergency_list = self.emergencies.get_all_active_Emergencies_id()
+            self.use_driver = False
+            self.load = False
+            self.send_required_vehicles()
 
     def go_through_emergencies(self):
-        
+
         while True:
-            
+
             if self.load == False:
-            
+
                 if self.use_driver != True:
                     self.use_driver = True
 
@@ -86,6 +84,37 @@ class Control():
                         sleep(uniform(5, 10))
 
                     self.use_driver = False
-                    self.load = True
+                    sleep(uniform(60, 120))
+
+    def send_required_vehicles(self):
+        if self.load == False:
+            for mission_id in self.emergency_list:
+                with open('required_vehicles_' + mission_id + '.json', 'r') as json_file:
+                    obj = json.loads(json_file.read())
                 
+                    with open('vehicle_data.json', 'r') as vehicle_data_file:
+                        vehicle_data = json.loads(vehicle_data_file.read())
+                        
+                        if int(obj["Benötigte Löschfahrzeuge"]) >= 1:
+                            vehicle_number_needet = int(obj["Benötigte Löschfahrzeuge"])
+                            counter = 0
+                            
+                            for i in vehicle_data:
+                                if i["vehicle_type"] == 0 and i["fms_show"] == 2 and i["fms_real"] == 2 and counter <= vehicle_number_needet:
+                                    counter += 1
+                                    vehicle_id = i["id"]
+                                    vehicle_list = []
+                                    vehicle_list.append(vehicle_id)
+                                    
+                            self.emergencies.send_required_vehicles(mission_id, vehicle_list)
+                                    
+                self.update_vehicle_data()        
+                sleep(uniform(10, 20))
+     
+                                    
+                                        
+                            
+                        
+
+
 Control()

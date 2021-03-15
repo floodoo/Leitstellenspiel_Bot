@@ -55,7 +55,7 @@ class Emergencies():
         num_lines = sum(1 for line in open('required_vehicles.txt'))
         num_lines -= 1
 
-        with open('required_vehicles.txt', 'r') as f, open('required_vehicles' + mission_id + '.json', 'w') as fo:
+        with open('required_vehicles.txt', 'r') as f, open('required_vehicles_' + mission_id + '.json', 'w') as fo:
             fo.write("{")
 
             for line in f:
@@ -81,8 +81,9 @@ class Emergencies():
         sleep(2)
 
         for vehicle_id in vehicle_id_list:
-            driver.find_element_by_id("vehicle_checkbox_" + vehicle_id).click()
+            self.driver.find_element_by_id("vehicle_checkbox_" + str(vehicle_id)).click()
             sleep(uniform(0.3, 2))
             
         sleep(uniform(1.5, 3))
-        driver.find_element_by_id("mission_alarm_btn").click()
+        self.driver.find_element_by_id("mission_alarm_btn").click()
+        sleep(uniform(5, 10))
