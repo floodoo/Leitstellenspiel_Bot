@@ -14,7 +14,9 @@ import os
 class Control():
 
     def __init__(self):
-        logging.basicConfig(level=logging.INFO)
+        logging.getLogger(__name__)
+        logging.basicConfig(format='%(levelname)s-%(message)s', level=logging.INFO)
+
         url = "https://www.leitstellenspiel.de/users/sign_in"
 
         user = "test-1234"
@@ -43,18 +45,15 @@ class Control():
         self.vehicle = Vehicles(self.driver)
         self.use_driver = False
 
-        logging.info("update_vehicle_data start")
         self.update_vehicle_data()
-        logging.info("update_active_emergency_list start")
         threading.Thread(target=self.update_active_emergency_list).start()
-        logging.info("go_through_emergencies start")
         self.update_active_emergency_list()
         self.go_through_emergencies()
 
     def update_vehicle_data(self):
         if self.use_driver != True:
             self.use_driver = True
-            logging.info("Get Vehicle Api")
+            logging.info("Update Vehicles")
             self.vehicle.get_vehicle_api()
             self.use_driver = False
 
@@ -62,7 +61,7 @@ class Control():
         if self.use_driver != True:
             self.use_driver = True
             self.load = True
-            logging.info("Get all active Emergency id's")
+            logging.info("Update active emergency list")
             self.emergency_list = self.emergencies.get_all_active_Emergencies_id()
             self.use_driver = False
             self.load = False
@@ -78,7 +77,7 @@ class Control():
 
                     for emergency in self.emergency_list:
 
-                        logging.info("Get required vehicles for " + emergency)
+                        logging.info("Update required vehicles for: " + emergency)
                         self.emergencies.get_required_vehicles(emergency)
                         sleep(uniform(5, 10))
 
@@ -90,6 +89,7 @@ class Control():
         if self.load == False and self.use_driver == False:
             for mission_id in self.emergency_list:
 
+                logging.info("Current mission ID: " + mission_id)
                 with open('required_vehicles_' + mission_id + '.json', 'r') as json_file:
                     obj = json.loads(json_file.read())
 
@@ -108,16 +108,20 @@ class Control():
                                 vehicle_id = i["id"]
                                 vehicle_list = []
                                 vehicle_list.append(vehicle_id)
-                                logging.info("Needet Vehicle List " + str(vehicle_list))
 
+                        logging.info("Send vehicles: " + str(vehicle_list))
                         self.emergencies.send_required_vehicles(
                             mission_id, vehicle_list)
 
                 sleep(10)
+                logging.debug(
+                    "Delete file: required_vehicles_" + mission_id + ".json")
                 os.remove("required_vehicles_" + mission_id + ".json")
+                logging.debug("Delete file: vehicle_data.json")
                 os.remove("vehicle_data.json")
+                logging.debug("Rewrite file: vehicle_data.json")
                 self.update_vehicle_data()
-                logging.info("Update Vehicle Data")
                 sleep(uniform(10, 20))
+
 
 Control()
