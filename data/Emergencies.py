@@ -18,10 +18,10 @@ class Emergencies():
 
         self.driver.get(url)
         emergencies = self.driver.find_elements_by_class_name(
-            "missionSideBarEntry")
+            "mission_panel_red")
 
         for i in emergencies:
-            active_emergencies.append(i.get_attribute("mission_id"))
+            active_emergencies.append(i.get_attribute("id")[14:])
 
         return active_emergencies
 
@@ -74,6 +74,9 @@ class Emergencies():
 
             fo.write("}")
 
+        sleep(0.2)
+        os.remove("required_vehicles.txt")
+
     def send_required_vehicles(self, mission_id, vehicle_id_list):
         url = "https://www.leitstellenspiel.de/missions/" + mission_id
 
@@ -81,9 +84,15 @@ class Emergencies():
         sleep(2)
 
         for vehicle_id in vehicle_id_list:
-            self.driver.find_element_by_id("vehicle_checkbox_" + str(vehicle_id)).click()
+            try:
+                self.driver.find_element_by_id(
+                    "vehicle_checkbox_" + str(vehicle_id)).click()
+
+            except:
+                print("Vehicle not found")
+
             sleep(uniform(0.3, 2))
-            
+
         sleep(uniform(1.5, 3))
         self.driver.find_element_by_id("mission_alarm_btn").click()
         sleep(uniform(5, 10))

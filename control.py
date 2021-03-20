@@ -63,6 +63,7 @@ class Control():
             self.load = True
             logging.info("Update active emergency list")
             self.emergency_list = self.emergencies.get_all_active_Emergencies_id()
+            logging.info("Active Emergencies: " + str(self.emergency_list))
             self.use_driver = False
             self.load = False
 
@@ -96,17 +97,19 @@ class Control():
                 with open('vehicle_data.json', 'r') as vehicle_data_file:
                     vehicle_data = json.loads(
                         vehicle_data_file.read())
+                    
+                    vehicle_list = []
 
                     if int(obj["Benötigte Löschfahrzeuge"]) >= 1:
                         vehicle_number_needet = int(
                             obj["Benötigte Löschfahrzeuge"])
+                        
                         counter = 1
 
                         for i in vehicle_data:
-                            if i["vehicle_type"] == 0 and i["fms_show"] == 2 and i["fms_real"] == 2 and counter <= vehicle_number_needet:
+                            if i["vehicle_type"] == 0 and i["fms_show"] == 2 and i["fms_real"] == 2 and counter <= vehicle_number_needet or i["vehicle_type"] == 0 and i["fms_show"] == 1 and i["fms_real"] == 1 and counter <= vehicle_number_needet:
                                 counter += 1
                                 vehicle_id = i["id"]
-                                vehicle_list = []
                                 vehicle_list.append(vehicle_id)
 
                         logging.info("Send vehicles: " + str(vehicle_list))
