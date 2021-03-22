@@ -15,7 +15,8 @@ class Control():
 
     def __init__(self):
         logging.getLogger(__name__)
-        logging.basicConfig(format='%(levelname)s-%(message)s', level=logging.INFO)
+        logging.basicConfig(
+            format='%(levelname)s-%(message)s', level=logging.INFO)
 
         url = "https://www.leitstellenspiel.de/users/sign_in"
 
@@ -24,6 +25,8 @@ class Control():
         self.emergency_list = []
         self.use_driver = False
         self.load = True
+        # self.benoetigte_Fahrzeuge = []
+        self.LF_list = [0, 1, 6, 7, 8, 9, 30, 37]
 
         self.driver = webdriver.Safari()
 
@@ -78,7 +81,8 @@ class Control():
 
                     for emergency in self.emergency_list:
 
-                        logging.info("Update required vehicles for: " + emergency)
+                        logging.info(
+                            "Update required vehicles for: " + emergency)
                         self.emergencies.get_required_vehicles(emergency)
                         sleep(uniform(5, 10))
 
@@ -97,24 +101,38 @@ class Control():
                 with open('vehicle_data.json', 'r') as vehicle_data_file:
                     vehicle_data = json.loads(
                         vehicle_data_file.read())
+
+                vehicle_list = []
+                
+                if "Benötigte Löschfahrzeuge" in obj:
+
+                    vehicle_number_needet = int(
+                        obj["Benötigte Löschfahrzeuge"])
+
+                    counter = 1
+
+                    for i in vehicle_data:
+                        if i["vehicle_type"] in self.LF_list and i["fms_show"] == 2 and i["fms_real"] == 2 and counter <= vehicle_number_needet or i["vehicle_type"] in self.LF_list and i["fms_show"] == 1 and i["fms_real"] == 1 and counter <= vehicle_number_needet:
+                            counter += 1
+                            vehicle_id = i["id"]
+                            vehicle_list.append(vehicle_id)
+                            
+                elif "Benötigte Streifenwagen" in obj:
                     
-                    vehicle_list = []
+                    vehicle_number_needet = int(
+                        obj["Benötigte Streifenwagen"])
 
-                    if int(obj["Benötigte Löschfahrzeuge"]) >= 1:
-                        vehicle_number_needet = int(
-                            obj["Benötigte Löschfahrzeuge"])
-                        
-                        counter = 1
+                    counter = 1
 
-                        for i in vehicle_data:
-                            if i["vehicle_type"] == 0 and i["fms_show"] == 2 and i["fms_real"] == 2 and counter <= vehicle_number_needet or i["vehicle_type"] == 0 and i["fms_show"] == 1 and i["fms_real"] == 1 and counter <= vehicle_number_needet:
-                                counter += 1
-                                vehicle_id = i["id"]
-                                vehicle_list.append(vehicle_id)
+                    for i in vehicle_data:
+                        if i["vehicle_type"] == 32 and i["fms_show"] == 2 and i["fms_real"] == 2 and counter <= vehicle_number_needet or i["vehicle_type"] == 32 and i["fms_show"] == 1 and i["fms_real"] == 1 and counter <= vehicle_number_needet:
+                            counter += 1
+                            vehicle_id = i["id"]
+                            vehicle_list.append(vehicle_id)
 
-                        logging.info("Send vehicles: " + str(vehicle_list))
-                        self.emergencies.send_required_vehicles(
-                            mission_id, vehicle_list)
+                    logging.info("Send vehicles: " + str(vehicle_list))
+                    self.emergencies.send_required_vehicles(
+                        mission_id, vehicle_list)
 
                 sleep(10)
                 logging.debug(
