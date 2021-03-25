@@ -79,26 +79,37 @@ class Emergencies():
 
     def send_required_vehicles(self, mission_id, vehicle_id_list):
         url = "https://www.leitstellenspiel.de/missions/" + mission_id
+        ignore_mission = False
 
         self.driver.get(url)
         sleep(2)
+        
+        with open('vehicle_data.json', 'r') as vehicle_data_file:
+            vehicle_data = json.loads(
+                vehicle_data_file.read())
         
         if not vehicle_id_list:
             print("The List is empty")
             
         else:
+            
+            for i in vehicle_data:
+                if i["target_id"] == mission_id:
+                    ignore_mission = True
+                    
+            if ignore_mission != True:
 
-            for vehicle_id in vehicle_id_list:
-                try:
-                    self.driver.find_element_by_id(
-                        "vehicle_checkbox_" + str(vehicle_id)).click()
+                for vehicle_id in vehicle_id_list:
+                    try:
+                        self.driver.find_element_by_id(
+                            "vehicle_checkbox_" + str(vehicle_id)).click()
 
-                except:
-                    print("Vehicle not found")
+                    except:
+                        print("Vehicle not found")
 
-                sleep(uniform(0.3, 2))
+                    sleep(uniform(0.3, 2))
 
-            sleep(uniform(1.5, 3))
-            self.driver.find_element_by_id("mission_alarm_btn").click()
+                sleep(uniform(1.5, 3))
+                self.driver.find_element_by_id("mission_alarm_btn").click()
             
         sleep(uniform(5, 10))
