@@ -82,17 +82,23 @@ class Emergencies():
 
         self.driver.get(url)
         sleep(2)
+        
+        if not vehicle_id_list:
+            print("The List is empty")
+            
+        else:
 
-        for vehicle_id in vehicle_id_list:
-            try:
-                self.driver.find_element_by_id(
-                    "vehicle_checkbox_" + str(vehicle_id)).click()
+            for vehicle_id in vehicle_id_list:
+                try:
+                    self.driver.find_element_by_id(
+                        "vehicle_checkbox_" + str(vehicle_id)).click()
 
-            except:
-                print("Vehicle not found")
+                except:
+                    print("Vehicle not found")
 
-            sleep(uniform(0.3, 2))
+                sleep(uniform(0.3, 2))
 
-        sleep(uniform(1.5, 3))
-        self.driver.find_element_by_id("mission_alarm_btn").click()
+            sleep(uniform(1.5, 3))
+            self.driver.find_element_by_id("mission_alarm_btn").click()
+            
         sleep(uniform(5, 10))
