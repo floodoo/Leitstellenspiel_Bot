@@ -1,9 +1,3 @@
 # Leitstellenspiel_Bot
 
-Work in progress
-
-Don't use it
-
-Don't copy it
-
-I'm only developing it because I'm interested in the topic and I want to improve my programming skills. The bot is not allowed in the game. Use it at your own risk. I do not take any responsibility. You can be banned in the game
+I am developing the bot to enhance my programming skills. I will not use the bot. It is not allowed to use a bot in the game. You can be banned forever. I do not take anyresponsibility. Use at your own risk. My test account was banned
